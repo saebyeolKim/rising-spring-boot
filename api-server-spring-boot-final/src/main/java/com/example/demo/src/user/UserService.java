@@ -69,4 +69,14 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+    public void modifyWithdrawUser(PatchUserReq patchUserReq) throws BaseException {
+        try{
+            int result = userDao.modifyWithdrawUser(patchUserReq);
+            if(result == 0){
+                throw new BaseException(MODIFY_FAIL_WITHDRAWAL);
+            }
+        } catch(Exception exception){
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

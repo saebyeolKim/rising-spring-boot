@@ -30,7 +30,7 @@ public class JwtService {
                 .setHeaderParam("type","jwt")
                 .claim("userIdx",userIdx)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365)))
+                .setExpiration(new Date(System.currentTimeMillis()+1*(1000*60*60*24*365))) // 1년, 실제 배포시 변경해야함
                 .signWith(SignatureAlgorithm.HS256, Secret.JWT_SECRET_KEY)
                 .compact();
     }
@@ -51,14 +51,14 @@ public class JwtService {
      */
     public int getUserIdx() throws BaseException{
         //1. JWT 추출
-        String accessToken = getJwt();
+        String accessToken = getJwt(); // header 에 있는 jwt 값을 가져온다
         if(accessToken == null || accessToken.length() == 0){
             throw new BaseException(EMPTY_JWT);
         }
 
         // 2. JWT parsing
         Jws<Claims> claims;
-        try{
+        try{ //jwt 를 파싱(json 형식으로 변환)한다.
             claims = Jwts.parser()
                     .setSigningKey(Secret.JWT_SECRET_KEY)
                     .parseClaimsJws(accessToken);
@@ -67,7 +67,7 @@ public class JwtService {
         }
 
         // 3. userIdx 추출
-        return claims.getBody().get("userIdx",Integer.class);
+        return claims.getBody().get("userIdx",Integer.class); // jwt 의 json 데이터 중 userIdx 를 가져온다
     }
 
 }

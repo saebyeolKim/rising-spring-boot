@@ -9,6 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetNoticeRes {
     private String notifyTitle;
-    private String createDt;
-    private String updateDt;
+    private String notifyContent;
+    private String date;
 }

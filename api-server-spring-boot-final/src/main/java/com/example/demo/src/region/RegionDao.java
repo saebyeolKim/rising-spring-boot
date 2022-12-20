@@ -4,10 +4,12 @@ import com.example.demo.src.region.model.GetRegionRes;
 import com.example.demo.src.region.model.PatchRegionReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
 
+@Repository
 public class RegionDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -16,13 +18,12 @@ public class RegionDao {
     public void setDataSource(DataSource dataSource) {this.jdbcTemplate = new JdbcTemplate(dataSource);}
 
     public List<GetRegionRes> getRegions() {
-        String getRegionsQuery = "SELECT REGION_NAME, REGION_DETAIL FROM REGION" +
-                "WHERE NATION_REGION IS NULL AND REGION_NAME = '서울' AND DEL_YN = 'N'";
+        String getRegionsQuery = "SELECT NATION_REGION, REGION_NAME, REGION_DETAIL FROM REGION";
         return this.jdbcTemplate.query(getRegionsQuery,
                 (rs, rowNum) -> new GetRegionRes(
-                        rs.getString("nationRegion"),
-                        rs.getString(("regionName")),
-                        rs.getString("regionDetail"))
+                        rs.getString("NATION_REGION"),
+                        rs.getString(("REGION_NAME")),
+                        rs.getString("REGION_DETAIL"))
                 );
     }
 

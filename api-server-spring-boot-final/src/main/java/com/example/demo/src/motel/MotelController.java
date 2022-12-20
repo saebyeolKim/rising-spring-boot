@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_EMPTY_EMAIL;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController
 @RequestMapping("/motels")
@@ -31,13 +31,19 @@ public class MotelController {
     /**
      * 모텔 조회 API
      * [GET] /motels
+     * 모텔 지역 조회 API
+     * [GET] /motels? regionId=
      * @return BaseResponse<List<GetMotelRes>>
      */
     @ResponseBody
     @GetMapping("")
-    private BaseResponse<List<GetMotelRes>> getMotels() {
+    private BaseResponse<List<GetMotelRes>> getMotels(@RequestParam(required = false) String regionId) {
         try {
-            List<GetMotelRes> getMotelRes = motelProvider.getMotels();
+            if (regionId == null) {
+                List<GetMotelRes> getMotelRes = motelProvider.getMotels();
+                return new BaseResponse<>(getMotelRes);
+            }
+            List<GetMotelRes> getMotelRes = motelProvider.getMotelByRegion(regionId);
             return new BaseResponse<>(getMotelRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
@@ -50,31 +56,16 @@ public class MotelController {
      * @return BaseResponse<GetMotelRes>
      */
     @ResponseBody
-    @GetMapping("/{motelName}")
-    public BaseResponse<GetMotelRes> getMotelByName(@PathVariable("motelName")String motelName) {
+    @GetMapping("/{motelId}")
+    public BaseResponse<GetMotelRes> getMotelByName(@PathVariable("motelId")int motelId) {
         try {
-            GetMotelRes getMotelRes = motelProvider.getMotelByName(motelName);
+            GetMotelRes getMotelRes = motelProvider.getMotelByName(motelId);
             return new BaseResponse<>(getMotelRes);
         } catch (BaseException exception) {
             return new BaseResponse<>(exception.getStatus());
         }
     }
 
-    /**
-     * 지역으로 모텔 조회 API
-     * [GET] /motels/:region
-     * @return BaseResponse<GetMotelRes>
-     */
-    @ResponseBody
-    @GetMapping("/{region}")
-    public BaseResponse<List<GetMotelRes>> getMotelByRegion(@PathVariable("motelName")int regionId) {
-        try {
-            List<GetMotelRes> getMotelRes = motelProvider.getMotelByRegion(regionId);
-            return new BaseResponse<>(getMotelRes);
-        } catch (BaseException exception) {
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
 
     /**
      * ID로 모텔 이름 수정
@@ -85,6 +76,9 @@ public class MotelController {
     @PatchMapping("/{motelId}")
     public BaseResponse<String> patchMotelByMotelId(@PathVariable("motelId") int motelId, @RequestBody Motel motel) {
         try {
+            if (motel.getMotelName() == null || motel.getMotelName() == "") {
+                throw new BaseException(PATCH_EMPTY_NAME);
+            }
             PatchMotelReq patchMotelReq = new PatchMotelReq(motelId,motel.getMotelName(), motel.getDelYn());
             motelService.modifyMotelName(patchMotelReq);
 
@@ -100,7 +94,7 @@ public class MotelController {
      * [PATCH] /motels/closing/:motelId
      * @return BaseResponse<String>
      */
-    @PatchMapping("/closing/:motelId")
+    @PatchMapping("/closing/{motelId}")
     public BaseResponse<String> deleteMotel(@PathVariable("motelId") int motelId, @RequestBody Motel motel) {
         try {
             PatchMotelReq patchMotelReq = new PatchMotelReq(motelId,motel.getMotelName(), motel.getDelYn());
@@ -121,33 +115,27 @@ public class MotelController {
     @PostMapping("")
     public BaseResponse<PostMotelRes> createMotel(@RequestBody PostMotelReq postMotelReq) {
         if (postMotelReq.getRegionId() == 0) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }else if (postMotelReq.getAccommodationId() == 0) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_REGION);
         }else if (postMotelReq.getMotelName() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }else if (postMotelReq.getMotelTelno() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_NAME);
+        }else if (postMotelReq.getMotelTel() == null) {
+            return new BaseResponse<>(POST_EMPTY_TEL);
         }else if (postMotelReq.getMotelLocation() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }else if (postMotelReq.getMotelNotify() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_LOCATION);
         }else if (postMotelReq.getMotelImage() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_IMAGE);
         }else if (postMotelReq.getMotelCeoName() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_CEO_NAME);
         }else if (postMotelReq.getMotelBusinessName() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_BUSINESS_NAME);
         }else if (postMotelReq.getMotelBusinessLocation() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_BUSINESS_LOCATION);
         }else if (postMotelReq.getMotelBusinessEmail() == null) {
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }else if (postMotelReq.getMotelBusinessTelno() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_BUSINESS_TEL);
         }else if (postMotelReq.getMotelBusinessRegistrationNo() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
-        }else if (postMotelReq.getDelYn() == null) {
-            return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+            return new BaseResponse<>(POST_EMPTY_BUSINESS_REGISTRATION);
         }
 
         try {

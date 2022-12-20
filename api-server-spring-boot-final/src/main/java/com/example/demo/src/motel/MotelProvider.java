@@ -30,16 +30,16 @@ public class MotelProvider {
         }
     }
 
-    public GetMotelRes getMotelByName(String motelName) throws BaseException {
+    public GetMotelRes getMotelByName(int motelId) throws BaseException {
         try {
-            GetMotelRes getMotelByName = motelDao.getMotelByName(motelName);
+            GetMotelRes getMotelByName = motelDao.getMotelByName(motelId);
             return getMotelByName;
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
-    public List<GetMotelRes> getMotelByRegion(int regionId) throws BaseException {
+    public List<GetMotelRes> getMotelByRegion(String regionId) throws BaseException {
         try {
             List<GetMotelRes> getMotelByRegion = motelDao.getMotelByRegion(regionId);
             return getMotelByRegion;

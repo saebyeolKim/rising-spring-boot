@@ -1,4 +1,4 @@
-package com.example.demo.src.motel.model;
+package com.example.demo.src.hotel.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetMotelRes {
+public class GetHotelRes {
     private int regionId;
     private int accommodationId;
     private int id;

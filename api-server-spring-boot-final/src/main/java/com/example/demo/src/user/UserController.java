@@ -62,16 +62,16 @@ public class UserController {
 
     /**
      * 회원 1명 조회 API
-     * [GET] /users/:userIdx
+     * [GET] /users/:userId
      * @return BaseResponse<GetUserRes>
      */
     // Path-variable
     @ResponseBody
-    @GetMapping("/{userIdx}") // (GET) 127.0.0.1:9000/app/users/:userIdx
-    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
+    @GetMapping("/{userId}") // (GET) 127.0.0.1:9000/app/users/:userIdx
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") String userId) {
         // Get Users
         try{
-            GetUserRes getUserRes = userProvider.getUser(userIdx);
+            GetUserRes getUserRes = userProvider.getUser(userId);
             return new BaseResponse<>(getUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -91,6 +91,18 @@ public class UserController {
         // TODO: email 관련한 짧은 validation 예시입니다. 그 외 더 부가적으로 추가해주세요!
         if(postUserReq.getEmail() == null){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
+        }
+        if(postUserReq.getUserId() == null){
+            return new BaseResponse<>(USERS_EMPTY_USER_ID);
+        }
+        if(postUserReq.getPassword() == null){
+            return new BaseResponse<>(POST_USERS_EMPTY_PASSWORD);
+        }
+        if(postUserReq.getUserName() == null){
+            return new BaseResponse<>(POST_EMPTY_NAME);
+        }
+        if(postUserReq.getTel() == null){
+            return new BaseResponse<>(POST_EMPTY_TEL);
         }
         //이메일 정규표현
         if(!isRegexEmail(postUserReq.getEmail())){
@@ -131,6 +143,9 @@ public class UserController {
     public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user){
         try {
             //jwt에서 idx 추출.
+            if (user.getUserName() == null) {
+                return new BaseResponse<>(POST_EMPTY_NAME);
+            }
             int userIdxByJwt = jwtService.getUserIdx();
             //userIdx와 접근한 유저가 같은지 확인
             if(userIdx != userIdxByJwt){
@@ -142,6 +157,32 @@ public class UserController {
 
             String result = "";
         return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 유저계정탈퇴 API
+     * [PATCH] /users/withdraw/:userId
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/withdraw/{userIdx}")
+    public BaseResponse<String> modifyWithdrawUser(@PathVariable("userIdx") int userIdx){
+        try {
+            //jwt에서 idx 추출.
+            int userIdxByJwt = jwtService.getUserIdx();
+            //userIdx와 접근한 유저가 같은지 확인
+            if(userIdx != userIdxByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            String userName = "";
+            //같다면 유저네임 변경
+            PatchUserReq patchUserReq = new PatchUserReq(userIdx, userName);
+            userService.modifyWithdrawUser(patchUserReq);
+
+            String result = "";
+            return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

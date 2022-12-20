@@ -29,7 +29,7 @@ public class MotelService {
         try {
             int result = motelDao.modifyMotelName(patchMotelReq);
             if(result == 0){
-                throw new BaseException(MODIFY_FAIL_MOTELNAME);
+                throw new BaseException(MODIFY_FAIL_NAME);
             }
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
@@ -40,7 +40,7 @@ public class MotelService {
         try {
             int result = motelDao.deleteMotel(patchMotelReq);
             if(result == 0){
-                throw new BaseException(MODIFY_FAIL_MOTELNAME);
+                throw new BaseException(MODIFY_FAIL_NAME);
             }
         } catch (Exception exception) {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
@@ -48,7 +48,6 @@ public class MotelService {
     }
 
     public PostMotelRes createMotel(PostMotelReq postMotelReq) throws BaseException{
-        // TODO:motelTelno 으로 중복 검사하기
         try {
             int motelId = motelDao.createMotel(postMotelReq);
             return new PostMotelRes(motelId);

@@ -9,9 +9,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PostMotelReq {
     private int regionId;
-    private int AccommodationId;
     private String motelName;
-    private String motelTelno;
+    private String motelTel;
     private String motelLocation;
     private String motelNotify;
     private String motelEvent;
@@ -27,5 +26,4 @@ public class PostMotelReq {
     private String motelBusinessEmail;
     private String motelBusinessTelno;
     private String motelBusinessRegistrationNo;
-    private String delYn;
 }

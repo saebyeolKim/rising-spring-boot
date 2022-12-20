@@ -21,6 +21,9 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
+    PATCH_ERROR_DELYN (false,2031,"삭제여부를 확인해주세요."),
+    EMPTY_START_DT (false,2032,"시작날짜를 입력해주세요."),
+    EMPTY_END_DT (false,2033,"종료날짜를 입력해주세요."),
 
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
@@ -29,7 +32,30 @@ public enum BaseResponseStatus {
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
+    POST_USERS_EMPTY_PASSWORD(false,2031,"비밀번호를 입력해주세요."),
 
+    // [POST] /motels , /hotels
+    POST_EMPTY_REGION (false,2018,"지역을 선택해주세요."),
+    POST_EMPTY_ACCOMMODATION (false,2019,"숙소 유형을 선택해주세요."),
+    POST_EMPTY_NAME (false,2020,"이름을 입력해주세요."),
+    POST_EMPTY_TEL (false,2021,"전화번호를 입력해주세요."),
+    POST_EMPTY_LOCATION (false,2022,"위치를 입력해주세요."),
+    POST_EMPTY_IMAGE (false,2023,"이미지를 넣어주세요."),
+    POST_EMPTY_CEO_NAME (false,2024,"대표자를 입력해주세요."),
+    POST_EMPTY_BUSINESS_NAME (false,2025,"사업이름을 입력해주세요."),
+    POST_EMPTY_BUSINESS_LOCATION (false,2026,"사업위치를 입력해주세요."),
+    POST_EMPTY_BUSINESS_TEL (false,2027,"사업 전화번호를 입력해주세요."),
+    POST_EMPTY_BUSINESS_REGISTRATION (false,2028,"사업자 번호를 입력해주세요."),
+
+    // [PATCH] /regions/:regionId
+    PATCH_EMPTY_REGION_NAME (false,2029,"지역 이름을 입력해주세요."),
+
+    // [PATCH] /motels/:motelId , [PATCH] /hotels/:hotelId
+    PATCH_EMPTY_NAME (false,2030,"이름을 입력해주세요."),
+
+    // [POST] /coupons
+    POST_DISCOUNT_PRICE(false,2034,"할인 금액을 입력해주세요."),
+    POST_PUBLISH_COUNT(false,2035,"발급 개수를 입력해주세요."),
 
 
     /**
@@ -44,19 +70,24 @@ public enum BaseResponseStatus {
 
 
 
+
     /**
      * 4000 : Database, Server 오류
      */
     DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
     SERVER_ERROR(false, 4001, "서버와의 연결에 실패하였습니다."),
+    MODIFY_FAIL_NAME(false,4002,"이름 수정 실패"),
+
 
     //[PATCH] /users/{userIdx}
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
     MODIFY_FAIL_REGIONNAME(false,4015,"지역이름 수정 실패"),
-    MODIFY_FAIL_MOTELNAME(false,4016,"모텔이름 수정 실패"),
+    MODIFY_FAIL_WITHDRAWAL(false,4016,"유저 탈퇴 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
+    COUPON_USE_ERROR(false, 4013, "쿠폰 사용에 실패하였습니다."),
+    POINT_USE_ERROR(false, 4014, "포인트 사용에 실패하였습니다.");
 
 
     // 5000 : 필요시 만들어서 쓰세요

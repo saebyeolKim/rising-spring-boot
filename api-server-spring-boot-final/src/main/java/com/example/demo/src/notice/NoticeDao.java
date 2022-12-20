@@ -19,25 +19,25 @@ public class NoticeDao {
     }
 
     public List<GetNoticeRes> getNotices() {
-        String getNoticesQuery = "SELECT NOTIFY_TITLE, DATE_FORMAT(IFNULL(UPDATE_DT, CREATE_DT), '%Y-%m-%d')" +
+        String getNoticesQuery = "SELECT NOTIFY_TITLE, NOTIFY_COTENT, DATE_FORMAT(IFNULL(UPDATE_DT, CREATE_DT), '%Y-%m-%d') as DATE " +
                 "FROM NOTIFY ORDER BY IFNULL(UPDATE_DT, CREATE_DT)";
         return this.jdbcTemplate.query(getNoticesQuery,
                 (rs, rowNum) -> new GetNoticeRes(
-                        rs.getString("notifyTitle"),
-                        rs.getString("createDt"),
-                        rs.getString("updateDt")
+                        rs.getString("NOTIFY_TITLE"),
+                        rs.getString("NOTIFY_COTENT"),
+                        rs.getString("DATE")
                 ));
     }
 
     public GetNoticeRes getNotice(int noticeId) {
-        String getNoticeQuery = "SELECT NOTIFY_TITLE, DATE_FORMAT(IFNULL(UPDATE_DT, CREATE_DT), '%Y-%m-%d')" +
-                "FROM NOTIFY ORDER BY IFNULL(UPDATE_DT, CREATE_DT) WHERE NOTIFY_ID = ? ";
+        String getNoticeQuery = "SELECT NOTIFY_TITLE, NOTIFY_COTENT, DATE_FORMAT(IFNULL(UPDATE_DT, CREATE_DT), '%Y-%m-%d') as DATE " +
+                "FROM NOTIFY WHERE NOTIFY_ID = ? ORDER BY IFNULL(UPDATE_DT, CREATE_DT)";
         int getNotifyParam = noticeId;
         return this.jdbcTemplate.queryForObject(getNoticeQuery,
                 (rs, rowNum) -> new GetNoticeRes(
-                        rs.getString("notifyTitle"),
-                        rs.getString("createDt"),
-                        rs.getString("updateDt")
+                        rs.getString("NOTIFY_TITLE"),
+                        rs.getString("NOTIFY_COTENT"),
+                        rs.getString("DATE")
                 ), getNotifyParam);
     }
 }

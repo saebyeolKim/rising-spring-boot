@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.example.demo.config.BaseResponseStatus.MODIFY_FAIL_REGIONNAME;
+
 @RestController
 @RequestMapping("/regions")
 public class RegionController {
@@ -56,6 +58,9 @@ public class RegionController {
     @PatchMapping("/{regionId}")
     public BaseResponse<String> patchRegions(@PathVariable("regionId") int regionId, @RequestBody Region region) {
         try {
+            if (region.getRegionName() == null || region.getRegionName() == "") {
+                throw new BaseException(MODIFY_FAIL_REGIONNAME);
+            }
             PatchRegionReq patchRegionReq = new PatchRegionReq(regionId, region.getRegionName());
             regionService.modifyRegionName(patchRegionReq);
             String result = "";
