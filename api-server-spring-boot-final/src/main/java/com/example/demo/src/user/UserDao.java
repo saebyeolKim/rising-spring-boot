@@ -24,11 +24,10 @@ public class UserDao {
     }
 
     public List<GetUserRes> getUsers(){
-        String getUsersQuery = "select USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL, USER_TELNO from USER";
+        String getUsersQuery = "select USER_ID, USER_NAME, USER_EMAIL, USER_TELNO from USER";
         return this.jdbcTemplate.query(getUsersQuery,
                 (rs,rowNum) -> new GetUserRes(
                         rs.getString("USER_ID"),
-                        rs.getString("USER_PASSWORD"),
                         rs.getString("USER_NAME"),
                         rs.getString("USER_EMAIL"),
                         rs.getString("USER_TELNO"))
@@ -36,12 +35,11 @@ public class UserDao {
     }
 
     public List<GetUserRes> getUsersByEmail(String email){
-        String getUsersByEmailQuery = "select USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL, USER_TELNO from USER where email =?";
+        String getUsersByEmailQuery = "select USER_ID, USER_NAME, USER_EMAIL, USER_TELNO from USER where email =?";
         String getUsersByEmailParams = email;
         return this.jdbcTemplate.query(getUsersByEmailQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getString("USER_ID"),
-                        rs.getString("USER_PASSWORD"),
                         rs.getString("USER_NAME"),
                         rs.getString("USER_EMAIL"),
                         rs.getString("USER_TELNO")),
@@ -49,12 +47,11 @@ public class UserDao {
     }
 
     public GetUserRes getUser(String userId){
-        String getUserQuery = "select USER_ID, USER_PASSWORD, USER_NAME, USER_EMAIL, USER_TELNO from USER where USER_ID = ?";
+        String getUserQuery = "select USER_ID, USER_NAME, USER_EMAIL, USER_TELNO from USER where USER_ID = ?";
         String getUserParams = userId;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(
                         rs.getString("USER_ID"),
-                        rs.getString("USER_PASSWORD"),
                         rs.getString("USER_NAME"),
                         rs.getString("USER_EMAIL"),
                         rs.getString("USER_TELNO")),
